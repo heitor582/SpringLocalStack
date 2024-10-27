@@ -1,0 +1,16 @@
+postgresql:
+  username: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
+  schema: ${POSTGRES_DB}
+  url: ${POSTGRES_URL:localhost}
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+aws:
+  access-key: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  url: ${AWS_URL}
+  port: ${AWS_PORT}

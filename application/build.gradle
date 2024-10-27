@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+    id 'java-conventions'
+}
+
+group = 'com.study.verifyPayment.application'
+
+dependencies {
+    implementation(project(":domain"))
+    testImplementation(project(path: ':domain', configuration: 'testClasses'))
+}

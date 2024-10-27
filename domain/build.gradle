@@ -1,0 +1,26 @@
+plugins {
+    id 'java-library'
+    id 'java-conventions'
+}
+
+group = 'com.study.verifyPayment.domain'
+
+
+dependencies {
+    implementation 'net.datafaker:datafaker:1.5.0'
+}
+
+configurations {
+    testClasses {
+        extendsFrom(testImplementation)
+    }
+}
+
+tasks.register('testJar', Jar) {
+    archiveClassifier.set('test')
+    from sourceSets.test.output
+}
+
+artifacts {
+    testClasses testJar
+}

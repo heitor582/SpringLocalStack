@@ -1,0 +1,68 @@
+plugins {
+	id 'java-conventions'
+	id 'application'
+	id 'org.springframework.boot' version '3.3.5'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.study.verifyPayment.infrastructure'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+dependencies {
+	// Project Modules
+	implementation(project(":domain"))
+	implementation(project(":application"))
+
+	// Spring Boot Starters
+	implementation('org.springframework.boot:spring-boot-starter-web') {
+		exclude module: 'spring-boot-starter-tomcat'
+	}
+	implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-undertow')
+
+	// Spring Cloud
+	implementation 'org.springframework.cloud:spring-cloud-aws-messaging:2.2.6.RELEASE'
+
+	// Spring Messaging
+	implementation 'org.springframework:spring-messaging:5.3.31'
+
+	// Flyway for Database Migration
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-database-postgresql'
+
+	// PostgreSQL Driver
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// YAML Parser
+	implementation('org.yaml:snakeyaml:2.0')
+
+	// OpenAPI Documentation
+	implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0')
+
+	// Testing Dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:localstack'
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:postgresql'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testRuntimeOnly('com.h2database:h2')
+
+	// Test Classes from Domain Module
+	testImplementation(project(path: ':domain', configuration: 'testClasses'))
+}
+
+springBoot {
+	mainClass = "com.study.verifyPayment.infrastructure.Main"
+}
+
+bootJar {
+	archivesBaseName = 'application'
+	destinationDirectory.set(file("${rootProject.buildDir}/libs"))
+}

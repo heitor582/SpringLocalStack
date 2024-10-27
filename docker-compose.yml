@@ -1,0 +1,51 @@
+services:
+  verify_payment:
+    build:
+      context: ./
+    ports:
+      - "8080:8080"
+      - "10400:10400"
+    depends_on:
+      - verify_payment_postgres
+      - localstack
+    env_file:
+      - .env
+
+  verify_payment_postgres:
+    image: postgres
+    container_name: verify_payment_postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - verify_payment_postgres_data:/var/lib/postgresql/data
+
+  localstack:
+    image: localstack/localstack
+    hostname: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SKIP_SSL_CERT_DOWNLOAD=1
+      - SERVICES=sqs
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME_EXTERNAL=localstack
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=ANUJDEKAVADIYAEXAMPLE
+      - AWS_SECRET_ACCESS_KEY=2QvM4/Tdmf38SkcD/qalvXO4EXAMPLEKEY
+      - SQS_ENDPOINT_STRATEGY=dynamic
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./scripts/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+    command: >
+      /bin/bash -c "localstack start &&
+      chmod +x /etc/localstack/init/ready.d/init-aws.sh &&
+      /etc/localstack/init/ready.d/init-aws.sh"
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  verify_payment_postgres_data:

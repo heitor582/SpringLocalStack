@@ -1,0 +1,5 @@
+rootProject.name = 'verifyPayment'
+include 'domain'
+include 'application'
+include 'infrastructure'
+
